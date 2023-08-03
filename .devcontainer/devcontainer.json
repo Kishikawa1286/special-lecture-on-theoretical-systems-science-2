@@ -1,0 +1,62 @@
+{
+	"name": "Ubuntu",
+	"dockerComposeFile": "docker-compose.yml",
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": true,
+			"configureZshAsDefaultShell": true,
+			"installOhMyZsh": true,
+			"upgradePackages": true
+		}
+	},
+	"service": "texlive-ja",
+	"workspaceFolder": "/workdir",
+	"shutdownAction": "stopCompose",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"James-Yu.latex-workshop"
+			],
+			"settings": {
+				"latex-workshop.latex.autoBuild.interval": 0,
+				"latex-workshop.latex.autoBuild.run": "onFileChange",
+				"latex-workshop.latex.recipes": [
+					{
+						"name": "latexmk 🔃",
+						"tools": [
+							"latexmk"
+						]
+					}
+				],
+				"latex-workshop.latex.tools": [
+					{
+						"name": "latexmk",
+						"command": "latexmk",
+						"args": [
+							"-silent",
+							"%DOC%"
+						],
+						"env": {}
+					}
+				],
+				// formatter
+				"[latex]": {
+					"editor.formatOnSave": true,
+					"editor.formatOnPaste": true,
+					"editor.defaultFormatter": "James-Yu.latex-workshop"
+				},
+				"latex-workshop.latexindent.path": "/usr/local/texlive/current/bin/x86_64-linux/latexindent",
+				"latex-workshop.latexindent.args": [
+					"%TMPFILE%",
+					"-c=%DIR%/",
+					"-y=defaultIndent: '%INDENT%'"
+				],
+				"latex-workshop.bibtex-format.sort.enabled": true,
+				"latex-workshop.bibtex-fields.sort.enabled": true,
+				"latex-workshop.message.update.show": false,
+				"latex-workshop.synctex.afterBuild.enabled": true,
+				"latex-workshop.view.pdf.viewer": "tab"
+			}
+		}
+	}
+}
