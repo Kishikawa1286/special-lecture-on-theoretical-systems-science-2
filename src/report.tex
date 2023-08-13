@@ -2,6 +2,24 @@
 
 \usepackage{amsmath}
 \usepackage[top=3cm, bottom=3cm, left=1cm, right=1cm]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+\lstset{
+	basicstyle=\ttfamily\small,
+	frame=single,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+	columns=fullflexible,
+	numbers=left,
+	xleftmargin=2.5em,
+	framexleftmargin=2em
+}
+\renewcommand{\figurename}{図}
+
+\DeclareRobustCommand{\rchi}{{\mathpalette\irchi\relax}}
+\newcommand{\irchi}[2]{\raisebox{\depth}{$#1\chi$}}
 
 \parindent = 0pt
 
@@ -63,21 +81,23 @@ $t_0 = kT, ~~ t = (k+1)T$ として, $x((k+1)T)$ を考える.
 
 式 \eqref{fom1-3} の係数を
 $A_d := e^{AT}, ~~ B_d := \int_0^T e^{A \tau} B d\tau, ~~ C_d := C$
-と置き直し, $x_k := x(kT), ~~ y_k := y(kT)$
+と置き, $x_k := x(kT), ~~ y_k := y(kT)$
 とすると, 次の差分方程式が得られる.
 
 \begin{align}
+	\left\{
 	\begin{aligned}
 		 & x_{k+1} = A_d x_k + B_d u_k, \\
 		 & y_k = C_d x_k.
 	\end{aligned}
+	\right.
 	\label{fom1-4}
 \end{align}
 
 \section*{(2)}
 
-行列 $D$ が正定であることを $D >^\mathrm{p} 0$,
-半正定であることを $D \geq^\mathrm{p} 0$ と表記する.
+行列 $D$ が正定であることを $D >^\mathrm{PD} 0$,
+半正定であることを $D \geq^\mathrm{PD} 0$ と表記する.
 
 \begin{equation}
 	x_{k+1} = A x_k + B u_k.
@@ -116,7 +136,7 @@ $A_d := e^{AT}, ~~ B_d := \int_0^T e^{A \tau} B d\tau, ~~ C_d := C$
 	P = A^T P A + Q - A^T P B ( B^T P B + R )^{-1} B^T P A
 \end{equation}
 
-さらに, $P, Q, R >^\mathrm{p} 0$ である.
+さらに, $P, Q, R >^\mathrm{PD} 0$ である.
 
 まず, 最初のステップの $k = N-1$ の場合について議論する.
 
@@ -139,8 +159,8 @@ $A_d := e^{AT}, ~~ B_d := \int_0^T e^{A \tau} B d\tau, ~~ C_d := C$
 	+ x_{N-1}^T (A^T P A + Q - M^T (B^T P B + R) M) x_{N-1}
 	\label{fom2-4}                                                   \\
 	 & \qquad \qquad \qquad \left(
-	M := (\underset{\geq^\mathrm{p} 0}{\underline{B^T P B}}
-	+ \underset{>^\mathrm{p}}{\underline{R}})^{-1} B^T P A
+	M := (\underset{\geq^\mathrm{PD} 0}{\underline{B^T P B}}
+	+ \underset{>^\mathrm{PD} 0}{\underline{R}})^{-1} B^T P A
 	~~ \text{として平方完成} \right)
 	\nonumber
 \end{align}
@@ -210,5 +230,54 @@ $W_k(x_k), k = 0, 1, \dots, N-1$ が $u_k = - M_k x_k$ で最小値をとるこ�
 現在の状態がどの最適な入力に対応するのかを確かめるだけで入力を定めることができるため,
 最適化問題をオンラインで解く必要がない.
 オフラインの計算によって状態と最適な入力の関係を調べておけばよい.
+
+\section*{(4)}
+
+\begin{enumerate}
+	\item 次の離散時間システムが安定になるように $T > 0$ を定める.
+	      \begin{equation}
+		      A_d = \exp \left( \left( w_1 A_1 + w_2 A_2 \right) T \right)
+	      \end{equation}
+	\item 次のようにスイッチング信号 $\sigma(t)$ を定める.
+	      \begin{equation}
+		      \sigma (t) = \sum_{l=1}^n l \cdot \rchi_{l} (t)
+	      \end{equation}
+	      ただし, $\rchi_{l} (t)$ は次のように定められる.
+	      \begin{equation}
+		      \rchi_{l} (t) = \begin{cases}
+			      1 & \text{if} ~~
+			      \exists j \in \{ 0, 1, 2, \dots \} ~~
+			      \text{such that} ~~ t \in \left[ \left( j + \sum_{m=1}^{l-1} w_m \right) T, \left( j + \sum_{m=1}^l w_m \right) T \right), \\
+			      0 & \text{otherwise}.
+		      \end{cases}
+	      \end{equation}
+\end{enumerate}
+
+\section*{(5)}
+
+\texttt{switched\_system\_3.m} を作成した.
+プログラムの実行結果として次のテキストの出力と図 \ref{fig-1} の画像を得た.
+
+\begin{lstlisting}
+Eigenvalues of A1:
+   -3.1926
+    2.1926
+
+Eigenvalues of A2:
+    1.2404
+   -5.2404
+
+A stable combination of w1 and w2:
+    0.2727    0.7273
+
+Stable T value: 0.01
+\end{lstlisting}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{./trajecctory_and_signal.jpg}
+	\caption{システムの状態の軌跡とスイッチング信号}
+	\label{fig-1}
+\end{figure}
 
 \end{document}
