@@ -236,11 +236,11 @@ $W_k(x_k), k = 0, 1, \dots, N-1$ が $u_k = - M_k x_k$ で最小値をとるこ�
 \begin{enumerate}
 	\item 次の離散時間システムが安定になるように $T > 0$ を定める.
 	      \begin{equation}
-		      A_d = \exp \left( \left( w_1 A_1 + w_2 A_2 \right) T \right)
+		      A_d = \exp \left( \left( \sum_{l=1}^2 w_l A_l \right) T \right)
 	      \end{equation}
 	\item 次のようにスイッチング信号 $\sigma(t)$ を定める.
 	      \begin{equation}
-		      \sigma (t) = \sum_{l=1}^n l \cdot \rchi_{l} (t)
+		      \sigma (t) = \sum_{l=1}^2 l \cdot \rchi_{l} (t)
 	      \end{equation}
 	      ただし, $\rchi_{l} (t)$ は次のように定められる.
 	      \begin{equation}
